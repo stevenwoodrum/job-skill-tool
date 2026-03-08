@@ -1,0 +1,5 @@
+Clone the repository on another computer, create a venv and then run
+pip install -r 'requirements.txt'
+and it will install all the dependencies for the cloned repository.
+
+Do not run this Django project in a production environment. It is not secure.

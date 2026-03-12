@@ -1,0 +1,31 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Imbue:opsz,wght@10..100,100..900&display=swap');
+
+
+:root {
+    --title-font-family: Imbue, serif;
+    --default-font-family: Imbue, serif;
+    --default-font-size: 1.25rem;
+    --primary-color: #6264E2;
+    --neutral-color: #FFFFFF;
+    --primary-color-light: #A2A3EA
+
+}
+
+h1,
+h2,
+h3,
+p {
+    margin: 0;
+    text-align: center;
+}
+
+a,
+a:visited,
+a:hover,
+a:active {
+    font-family: Imbue, serif;
+    color: var(--neutral-color);
+    text-decoration: none;
+}
+

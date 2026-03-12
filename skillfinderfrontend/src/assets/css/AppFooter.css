@@ -1,0 +1,22 @@
+
+
+footer {
+    background: var(--primary-color);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 40px 1fr;
+    gap: 1em;
+    grid-column: 1 / -1;
+    grid-row: 9 / 10;
+}
+
+.copyright {
+    font-family: Imbue, serif;
+}
+
+.links {
+    font-family: Imbue, serif;
+}
+
+
+

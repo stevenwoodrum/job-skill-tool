@@ -1,0 +1,24 @@
+
+header {
+    background: var(--primary-color);
+    display: grid;
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.title {
+    font-family: Imbue, serif;
+    grid-column: 1 / 2;
+}
+
+.text-logo {
+    grid-column: 1 / 2;
+    font-size: 3em;
+    margin-top: 1em;
+    margin-left: 1em;
+}
+
+.head-button {
+    margin-top: 1em;
+}

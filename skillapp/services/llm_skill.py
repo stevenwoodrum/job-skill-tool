@@ -7,6 +7,52 @@ import requests
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL_NAME = "llama3.1"
 
+"""
+Local Ollama Setup and Usage
+
+This module sends prompts to a locally running Ollama model to perform
+skill extraction from job descriptions.
+
+Prerequisites
+-------------
+1. Install Ollama
+   https://ollama.com/download
+   (brew install ollama)
+
+2. Start the Ollama server
+   Ollama runs automatically in the background after installation.
+   The API will be available at:
+       http://localhost:11434
+
+Operation
+---------
+This code sends HTTP POST requests to the Ollama API endpoint:
+
+    POST http://localhost:11434/api/generate
+
+with the payload:
+    {
+        "model": "<model name>",
+        "prompt": "<text prompt>",
+        "stream": false
+    }
+
+The model response is returned as JSON and parsed for structured skill data.
+
+Typical Flow
+------------
+1. Send job description prompt to Ollama.
+2. Extract raw skill candidates.
+3. Run a second pass to normalize and filter skills.
+4. Return cleaned structured skill results.
+
+Notes
+-----
+- The Ollama server must be running locally.
+- The specified model must already be downloaded.
+- This implementation uses the synchronous `/api/generate` endpoint.
+"""
+
 
 def call_ollama(prompt: str, model: str = MODEL_NAME, timeout: int = 120) -> str:
     response = requests.post(

@@ -216,3 +216,23 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Frontend
+node_modules/
+skillfinderfrontend/build/
+*/node_modules/
+**/dist/
+**/build/
+**/coverage/
+.test-results/
+.parcel-cache/
+.eslintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp.*
+
+# Dataset
+data/
+*.csv
+

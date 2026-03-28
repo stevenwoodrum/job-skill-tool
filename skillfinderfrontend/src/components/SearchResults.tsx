@@ -1,18 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
-export interface JobResult {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  description: string;
-}
+import { JobResult } from "../types/job";
 
 interface SearchResultProps {
   job: JobResult;
 }
 
+const SETTING_COLORS: Record<string, string> = {
+  Remote: "#1D9E75",
+  Hybrid: "#185FA5",
+  "On-site": "#888780",
+};
 
 const SearchResults: React.FC<SearchResultProps> = ({ job }) => {
   const navigate = useNavigate();
@@ -26,10 +24,14 @@ const SearchResults: React.FC<SearchResultProps> = ({ job }) => {
     <div style={styles.row}>
       <div style={styles.titleCol}>
         <span style={styles.jobTitle}>{job.title}</span>
+        <span style={styles.employmentType}>{job.employmentType}</span>
       </div>
       <div style={styles.companyCol}>
         <span style={styles.company}>{job.company}</span>
         <span style={styles.location}>{job.location}</span>
+        <span style={{ ...styles.badge, backgroundColor: SETTING_COLORS[job.workSetting] ?? "#888" }}>
+          {job.workSetting}
+        </span>
       </div>
       <div style={styles.descCol}>
         <span style={styles.description}>{job.description}</span>
@@ -55,12 +57,15 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   titleCol: {
     flex: "0 0 140px",
+    display: "flex",
+    flexDirection: "column",
+    gap: 4,
   },
   companyCol: {
     flex: "0 0 200px",
     display: "flex",
     flexDirection: "column",
-    gap: 2,
+    gap: 4,
   },
   descCol: {
     flex: 1,
@@ -75,6 +80,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontSize: "0.95rem",
     fontFamily: "sans-serif",
   },
+  employmentType: {
+    fontSize: "0.75rem",
+    color: "white",
+    fontFamily: "sans-serif",
+    opacity: 0.85,
+  },
   company: {
     fontWeight: 600,
     color: "white",
@@ -82,9 +93,19 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontFamily: "sans-serif",
   },
   location: {
-    color: "#555",
+    color: "#333",
     fontSize: "0.8rem",
     fontFamily: "sans-serif",
+  },
+  badge: {
+    display: "inline-block",
+    color: "white",
+    fontSize: "0.7rem",
+    fontFamily: "sans-serif",
+    fontWeight: 600,
+    padding: "2px 8px",
+    borderRadius: 4,
+    width: "fit-content",
   },
   description: {
     color: "white",
@@ -107,7 +128,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: "#111",
     fontFamily: "sans-serif",
     whiteSpace: "nowrap",
-    transition: "background-color 0.15s",
   },
 };
 

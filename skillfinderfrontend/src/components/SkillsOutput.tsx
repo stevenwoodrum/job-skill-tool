@@ -5,7 +5,8 @@ import "../assets/css/SkillMatching.css"
 type SkillResults = {
     jobOverview: string
     skillsAnalysis: string
-    nextSteps: string
+    nextSteps: string;
+    skills?: any[];
 }
 
 function SkillsOutput() {
@@ -13,31 +14,54 @@ function SkillsOutput() {
     const [results, setResults] = useState<SkillResults>({
         jobOverview: "",
         skillsAnalysis: "",
-        nextSteps: ""
+        nextSteps: "",
+        skills: []
     })
 
     const [loading, setLoading] = useState(false)
-
-    // These will be implemented once the backend is set up, for now,
-    // simulated useEffect will occur instead.
-    async function fetchResults() {
-        setLoading(true)
-
-        const res = await fetch("/api/skill-match")
-        const data = await res.json()
-
-        setResults(data)
-        setLoading(false)
-    }
-
-    /* useEffect(() => {
-        fetchResults()
-    }, [])
-*/
-
-
+    const [error, setError] = useState("")
 
     useEffect(() => {
+        const jobString = sessionStorage.getItem("selectedJob");
+        if (!jobString) {
+            setError("No job selected for skill analysis");
+            return;
+        }
+
+        const job = JSON.parse(jobString);
+        const jobDescription = job.description || job.title || "";
+
+        const fetchSkills = async () => {
+            setLoading(true)
+            setError("");
+            try {
+                const res = await fetch("/skillapp/skill-match/", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({job_description: jobDescription}),
+                });
+
+                if (!res.ok) throw new Error("Skill extraction failed");
+                const data = await res.json();
+                if (data.error) {
+                    setResults({jobOverview: "error", skillsAnalysis: data.error, nextSteps: "error"})
+                } else {
+                    setResults(data);
+                }
+            } catch (err) {
+                setError("Failed to extract skills. Please try again");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchSkills();
+    }, []);
+
+
+
+
+
+    /*useEffect(() => {
         setTimeout(() => {
             setResults({
                 jobOverview: `
@@ -85,7 +109,7 @@ To improve your competitiveness for modern software engineering roles, consider 
     `
             });
         }, 1500);
-    }, []);
+    }, []);*/
 
     return (
         <div className="skills-output">

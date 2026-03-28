@@ -54,7 +54,7 @@ Notes
 """
 
 
-def call_ollama(prompt: str, model: str = MODEL_NAME, timeout: int = 360) -> str:
+def call_ollama(prompt: str, model: str = MODEL_NAME, timeout: int = 120) -> str:
     response = requests.post(
         OLLAMA_URL,
         json={
@@ -178,20 +178,34 @@ def extract_skills(job_description: str, model: str = MODEL_NAME) -> dict:
     return final
 
 
-def analyze_skills(description: str) -> dict:
-    if not description or not description.strip():
+def analyze_job_description(job_description: str) -> dict:
+    if not job_description or not job_description.strip():
         return {
             "jobOverview": "",
+            "skillsAnalysis": "",
             "skills": [],
         }
+    try:
+        skills = extract_skills(job_description)["skills"]
+        if skills:
+            skills_analysis = "\n".join(
+                f"- {s['skill']} ({s['type']}) | evidence: {s['evidence']} | confidence: {s['confidence']}"
+                for s in skills
+            )
+        else:
+            skills_analysis = "No high-confidence skills were extracted."
 
-    skills = extract_skills(description)["skills"]
-
-    return {
-        "jobOverview": "Skill extraction completed using a local Ollama model.",
-        # "skillsAnalysis": skills_analysis,
-        "skills": skills,
-    }
+        return {
+            "jobOverview": job_description,
+            "skillsAnalysis": skills_analysis,
+            "skills": skills,
+        }
+    except Exception as e:
+        return {
+            "jobOverview": "",
+            "skillsAnalysis": f"Error extracting skills: {str(e)}",
+            "skills": []
+        }
 
 
 if __name__ == "__main__":

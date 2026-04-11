@@ -32,6 +32,7 @@ function SkillsOutput() {
         const jobDescription = job.description || job.title || "";
 
         const fetchSkills = async () => {
+            const start = performance.now()
             setLoading(true)
             setError("");
             try {
@@ -43,6 +44,8 @@ function SkillsOutput() {
 
                 if (!res.ok) throw new Error("Skill extraction failed");
                 const data = await res.json();
+                const end = performance.now()
+                console.log("Total request time: ", ((end - start) / 1000).toFixed(2), "seconds");
                 if (data.error) {
                     setResults({jobOverview: "error", skillsAnalysis: data.error, nextSteps: "error"})
                 } else {

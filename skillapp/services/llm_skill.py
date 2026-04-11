@@ -4,8 +4,11 @@ from typing import Any
 
 import requests
 
+
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL_NAME = "llama3.1"
+
+
 
 """
 Local Ollama Setup and Usage
@@ -67,6 +70,35 @@ def call_ollama(prompt: str, model: str = MODEL_NAME, timeout: int = 120) -> str
     response.raise_for_status()
     return response.json()["response"].strip()
 
+#VT LLM input stuff - you need to get your own API key and need to be on the VT VPN to run.
+# Go to https://llm-api.arc.vt.edu/api/v1/ to do that.
+VT_API_URL = "https://llm-api.arc.vt.edu/api/v1/chat/completions"
+API_KEY = "YOUR-API-KEY"
+VT_MODEL_NAME = "gpt-oss-120b"
+
+# The call to the VT LLM using the above assets.
+def call_llm(prompt: str, model: str = VT_MODEL_NAME, timeout: int = 120) -> str:
+    response = requests.post(
+        VT_API_URL,
+        headers={
+            "Authorization": f"Bearer {API_KEY}",
+            "Content-Type": "application/json",
+        },
+        json={
+            "model": model,
+            "messages": [
+                {"role": "system", "content": "You extract structured data and return JSON only."},
+                {"role": "user", "content": prompt},
+            ],
+            "temperature": 0.0,
+        },
+        timeout=timeout,
+    )
+
+    response.raise_for_status()
+    data = response.json()
+
+    return data["choices"][0]["message"]["content"].strip()
 
 def parse_json(text: str) -> dict:
     text = text.strip()
@@ -164,6 +196,36 @@ Raw skills:
 {json.dumps(raw_skills, indent=2)}
 """.strip()
 
+# One single prompt to lessen needed calls to LLM, as far as I can tell this
+# doesn't seem to cause an immediately obvious decrease in effectiveness of output.
+def combined_prompt(job_description: str) -> str:
+    return f"""
+Extract and clean professional skills from this job description.
+
+Rules:
+- return normalized skills
+- remove duplicates and junk
+- include only relevant job skills
+- confidence >= 0.60
+
+Return JSON only:
+
+{{
+  "skills": [
+    {{
+      "skill": "normalized name",
+      "type": "technical | domain | soft | certification | tool",
+      "evidence": "short phrase",
+      "confidence": 0.0
+    }}
+  ]
+}}
+
+Job description:
+\"\"\"
+{job_description}
+\"\"\"
+"""
 
 def clamp_confidence(value: Any) -> float:
     try:
@@ -171,11 +233,14 @@ def clamp_confidence(value: Any) -> float:
     except (TypeError, ValueError):
         return 0.0
 
-
-def extract_skills(job_description: str, model: str = MODEL_NAME) -> dict:
-    raw = parse_json(call_ollama(raw_skills_prompt(job_description), model=model))
-    final = parse_json(call_ollama(clean_skills_prompt(job_description, raw), model=model))
-    return final
+# Edited to use call_llm instead of call_ollama, then commented out double call
+# to have just the single call.
+def extract_skills(job_description: str, model: str = VT_MODEL_NAME) -> dict:
+    ##raw = parse_json(call_llm(raw_skills_prompt(job_description), model=model))
+    ##final = parse_json(call_llm(clean_skills_prompt(job_description, raw), model=model))
+    ##return final
+    one_step = parse_json(call_llm(combined_prompt(job_description), model=model))
+    return one_step;
 
 
 def analyze_job_description(job_description: str) -> dict:

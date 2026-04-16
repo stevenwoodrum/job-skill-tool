@@ -4,6 +4,39 @@ import math
 import pandas as pd
 import requests
 
+"""
+Local Ollama Setup and Usage
+
+This module sends embedding requests to a locally running Ollama model to perform
+skill matches.
+
+Prerequisites
+-------------
+1. Install Ollama
+   https://ollama.com/download
+   (brew install ollama)
+
+2. Start the Ollama server
+   Ollama runs automatically in the background after installation.
+   The API will be available at:
+       http://localhost:11434
+
+3. Pull Ollama embedding model
+    ollama pull embeddinggemma
+
+Operation
+---------
+This code sends HTTP POST requests to the Ollama API endpoint:
+
+    POST http://localhost:11434/api/embeddings
+    
+where we pull the data["embeddings"].
+
+Notes
+- The Ollama server must be running locally.
+- The specified model must already be downloaded.
+- This implementation uses the synchronous `/api/generate` endpoint.
+"""
 
 class OllamaEmbeddingProvider:
     def __init__(self, model="embeddinggemma", base_url="http://localhost:11434"):

@@ -7,7 +7,7 @@ import json
 
 from django.http import HttpResponse
 
-from skillapp.services.llm_skill import analyze_job_description
+from skillapp.services.llm_skill import analyze_skills
 from skillapp.services.skill_match import SkillMatcher, OllamaEmbeddingProvider
 
 embedding_provider = OllamaEmbeddingProvider()
@@ -24,7 +24,7 @@ def check_skills(request):
         if not job_description:
             return JsonResponse({"error": "job_description is required"}, status=400)
 
-        result = analyze_job_description(job_description)
+        result = analyze_skills(job_description)
 
         return JsonResponse(result)
     except json.JSONDecodeError:

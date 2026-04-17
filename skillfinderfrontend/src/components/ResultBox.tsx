@@ -2,7 +2,7 @@
 
 type ResultBoxProps = {
     title: string
-    content: string
+    content: React.ReactNode;
     variant?: "light" | "medium" | "dark"
 }
 

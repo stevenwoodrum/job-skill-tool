@@ -73,7 +73,7 @@ def call_ollama(prompt: str, model: str = MODEL_NAME, timeout: int = 120) -> str
 #VT LLM input stuff - you need to get your own API key and need to be on the VT VPN to run.
 # Go to https://llm-api.arc.vt.edu/api/v1/ to do that.
 VT_API_URL = "https://llm-api.arc.vt.edu/api/v1/chat/completions"
-API_KEY = "Your_API_Key"
+API_KEY = ""
 VT_MODEL_NAME = "gpt-oss-120b"
 
 # The call to the VT LLM using the above assets.

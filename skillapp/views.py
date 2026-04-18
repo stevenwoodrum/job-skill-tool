@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+import pdfplumber
 
 # Create your views here.
 
@@ -19,16 +20,57 @@ def check_skills(request):
         return JsonResponse({"error": "POST method required"}, status=405)
 
     try:
+        # If a file was uploaded, handle PDF input
+        if request.FILES:
+            uploaded_file = request.FILES.get("file")
+
+            if not uploaded_file:
+                return JsonResponse(
+                    {"error": "File upload detected, but no file field named 'file' found"},
+                    status=400
+                )
+
+            filename = uploaded_file.name.lower()
+            content_type = uploaded_file.content_type
+
+            if not filename.endswith(".pdf"):
+                return JsonResponse(
+                    {"error": "Only PDF files are supported for file uploads"},
+                    status=400
+                )
+
+            # Extract text from PDF
+            extracted_text = ""
+            with pdfplumber.open(uploaded_file) as pdf:
+                for page in pdf.pages:
+                    page_text = page.extract_text()
+                    if page_text:
+                        extracted_text += page_text + "\n"
+
+            if not extracted_text.strip():
+                return JsonResponse(
+                    {"error": "Could not extract text from PDF"},
+                    status=400
+                )
+
+            result = analyze_skills(extracted_text.strip())
+            return JsonResponse(result)
+
         body = json.loads(request.body)
         job_description = body.get("job_description", "").strip()
+
         if not job_description:
-            return JsonResponse({"error": "job_description is required"}, status=400)
+            return JsonResponse(
+                {"error": "job_description is required"},
+                status=400
+            )
 
         result = analyze_skills(job_description)
-
         return JsonResponse(result)
+
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
+
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 

@@ -45,14 +45,16 @@ function SkillsOutput() {
             return;
         }
 
+        const fullJob = JSON.parse(jobString)
+        setJob(fullJob.description || fullJob.title || "")
+
         const analyzedResumeString = sessionStorage.getItem("analyzedResume");
         if (!analyzedResumeString) {
             //setError("No analyzed resume data available");
             return;
         }
         setResumeResults(JSON.parse(analyzedResumeString));
-        const fullJob = JSON.parse(jobString)
-        setJob(fullJob.description || fullJob.title || "")
+
     }, [])
 
 

@@ -346,33 +346,61 @@ if __name__ == "__main__":
     # json_dump = [analyze_skills(resume)]
     # json_dump[0]['type'] = "resume"
     json_dump = []
-
     from pathlib import Path
+    BASE_DIR = Path(__file__).resolve().parents[3]
     import pandas as pd
 
-    BASE_DIR = Path(__file__).resolve().parents[3]
-    csv_path = BASE_DIR / "postings.csv"
+    # csv_path = BASE_DIR / "postings.csv"
+    #
+    # df = pd.read_csv(csv_path)
+    #
+    # # Take 10 random jobs
+    # sample_jobs = df.sample(n=200, random_state=42)
+    # skip_count = 0
+    # # Convert each job posting
+    # for _, row in sample_jobs.iterrows():
+    #     if skip_count > 0:
+    #         skip_count -= 1
+    #         continue
+    #     print(_)
+    #     print(row['title'])
+    #     job_text = row["description"]
+    #
+    #     analyzed_job = analyze_skills(job_text)
+    #     analyzed_job["type"] = "job"
+    #     analyzed_job["title"] = row["title"]
+    #     analyzed_job["id"] = row["job_id"]
+    #
+    #     json_dump.append(analyzed_job)
+    #
+    # # Save test file
+    # with open("test_jobs.json", "w") as f:
+    #     json.dump(json_dump, f, indent=4)
+
+    json_dump = []
+    csv_path = BASE_DIR / "Resume.csv"
 
     df = pd.read_csv(csv_path)
 
     # Take 10 random jobs
-    sample_jobs = df.sample(n=30, random_state=42)
-
+    sample_resumes = df.sample(n=100, random_state=42)
+    skip_count = 0
     # Convert each job posting
-    for _, row in sample_jobs.iterrows():
+    for _, row in sample_resumes.iterrows():
+        if skip_count > 0:
+            skip_count -= 1
+            continue
         print(_)
-        print(row['title'])
-        job_text = row["description"]
 
-        analyzed_job = analyze_skills(job_text)
-        analyzed_job["type"] = "job"
-        analyzed_job["title"] = row["title"]
-        analyzed_job["id"] = row["job_id"]
+        resume_text = row["Resume_str"]
+
+        analyzed_job = analyze_skills(resume_text)
+        analyzed_job['id'] = _
 
         json_dump.append(analyzed_job)
 
     # Save test file
-    with open("test_jobs.json", "w") as f:
+    with open("test_resumes.json", "w") as f:
         json.dump(json_dump, f, indent=4)
 
     # print(json.dumps(analyze_skills(resume), indent=2))

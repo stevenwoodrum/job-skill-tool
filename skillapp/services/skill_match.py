@@ -270,7 +270,7 @@ class SkillMatcher:
 
 if __name__ == "__main__":
     # provider = OllamaEmbeddingProvider()
-    matcher = SkillMatcher(threshold=0.4)
+    matcher = SkillMatcher(threshold=0.55)
 
     from pathlib import Path
     import json

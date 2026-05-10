@@ -13,7 +13,7 @@ from skillapp.services.llm_skill import analyze_skills
 from skillapp.services.skill_match import SkillMatcher, OllamaEmbeddingProvider
 
 embedding_provider = OllamaEmbeddingProvider()
-matcher = SkillMatcher(embedding_provider, threshold=0.80)
+matcher = SkillMatcher(embedding_provider, threshold=0.60)
 
 def extract_pdf_text(file_obj):
     text = ""

@@ -270,7 +270,7 @@ class SkillMatcher:
 
 if __name__ == "__main__":
     # provider = OllamaEmbeddingProvider()
-    matcher = SkillMatcher(threshold=0.60)
+    matcher = SkillMatcher(threshold=0.4)
 
     from pathlib import Path
     import json
@@ -298,6 +298,8 @@ if __name__ == "__main__":
             key=lambda x: x["score"],
             reverse=True
         )
+        # print(report['unmatched_job_skills'])
+        # print(report['unused_resume_skills'])
 
 
         score = 0
@@ -325,5 +327,6 @@ if __name__ == "__main__":
         dict['id'] = item['id']
         dict['score'] = score
         return_df.append(dict)
+
     return_df = pd.DataFrame(return_df)
-    return_df.to_csv("baseline_skill.csv", index=False)
+    # return_df.to_csv("baseline_skill.csv", index=False)

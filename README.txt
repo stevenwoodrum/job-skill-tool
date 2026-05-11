@@ -45,5 +45,5 @@ CSVs are not included due to file size.
 Database is already hosted on Supabase, no reloading needed.
 
 To train/evaluate model:
-...
+See README in 'analysis' folder.
 

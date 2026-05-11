@@ -5,6 +5,8 @@ charset-normalizer==3.4.6
 cryptography==46.0.7
 Django==6.0.3
 idna==3.11
+imbalanced-learn==0.14.1
+joblib==1.5.3
 lxml==6.1.0
 numpy==2.4.3
 pandas==3.0.1
@@ -18,8 +20,12 @@ python-dateutil==2.9.0.post0
 python-docx==1.2.0
 python-dotenv==1.2.2
 requests==2.33.0
+scikit-learn==1.8.0
+scipy==1.17.1
 six==1.17.0
+sklearn-compat==0.1.5
 sqlparse==0.5.5
+threadpoolctl==3.6.0
 typing_extensions==4.15.0
 tzdata==2025.3
 urllib3==2.6.3

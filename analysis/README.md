@@ -23,6 +23,44 @@ The current generated files also include helpful metadata columns like `resume_t
 
 Use this only if you need to recreate `training_dataset.csv` from extracted job/resume JSON files.
 
+### Local Ollama embeddings
+
+By default, `build_training_dataset.py` calls a local Ollama server to create semantic embeddings for each resume and job. The script sends `POST` requests to:
+
+```text
+http://localhost:11434/api/embed
+```
+
+Install and start Ollama, then pull the embedding model:
+
+```bash
+ollama serve
+```
+
+In a second terminal:
+
+```bash
+ollama pull embeddinggemma
+```
+
+Keep `ollama serve` running while building the dataset. You can verify that the local server is reachable with:
+
+```bash
+curl http://localhost:11434/api/tags
+```
+
+If you use a different model or server URL, pass those values explicitly:
+
+```bash
+python3 build_training_dataset.py \
+  --jobs test_jobs.json \
+  --resumes test_resumes.json \
+  --output training_dataset.csv \
+  --ollama-model embeddinggemma \
+  --ollama-base-url http://localhost:11434 \
+  --ollama-timeout 120
+```
+
 ```bash
 python3 build_training_dataset.py \
   --jobs test_jobs.json \

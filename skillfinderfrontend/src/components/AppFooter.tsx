@@ -9,7 +9,6 @@ function AppFooter() {
                 ©2026 SkillLens
             </section>
             <section className="links">
-                <h3>Contact Us</h3>
             </section>
         </footer>
     )

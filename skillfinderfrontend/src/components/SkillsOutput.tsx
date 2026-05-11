@@ -184,12 +184,6 @@ function SkillsOutput() {
                 }
                 variant="medium"
             />
-
-            <ResultBox
-                title="Recommended Next Steps:"
-                content={results.nextSteps}
-                variant="dark"
-            />
         </div>
     )
 }

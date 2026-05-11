@@ -14,6 +14,12 @@ Also install:
 Database setup:
 1. Create a .env file in the project root with:
 DB_PASSWORD=<ask team for password>
+
+Database Access (Read-Only):
+The database is hosted on Supabase with read-only access available.
+Connection string:
+postgresql://readonly:Team4pasVT@db.jkpuckqoppeukeebqnvq.supabase.co:5432/postgres
+
 2. Run migrations:
 python manage.py migrate
 
